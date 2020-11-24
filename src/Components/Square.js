@@ -1,7 +1,16 @@
 function Square(props) {
   return (
     <div>
-      {props.color ? <button style={{color: props.color}}>O</button> : <button></button>}
+      {props.color 
+        ? 
+        <button 
+          style={{color: props.color}}
+          onClick={props.onClick}
+          >
+            O
+          </button> 
+        : 
+        <button onClick={props.onClick}></button>}
     </div>
   )
 }

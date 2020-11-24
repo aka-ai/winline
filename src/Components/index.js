@@ -1,26 +1,17 @@
 import React, { Component } from 'react'
 import GameBoard from './GameBoard'
+import NextColors from './NextColors'
+import board from './utilities/board'
 class Game extends Component {
   constructor() {
     super()
     this.colors = ['red', 'yellow', 'green', 'blue', 'pink', 'gray', 'brown']
     this.state = {
+      board: board,
       nextRandomColors: this.getRandomColors(),
-      board: this.generateBoardWithId(),
-      // nextRandomCells: 
+      colorPicked: null,
+      cellPicked: null
     }
-  }
-  generateBoardWithId() {
-    //each cell in the board has {id, color}
-    const board = []
-    for (let i = 0; i <= 9; i++) {
-      const arr = []
-      for (let j = 0; j <= 9; j++) {
-        arr.push({id: [[i],[j]], color: null})
-      }
-      board.push(arr)
-    }
-    return board
   }
   getRandomColors() {
     const randomColors = []
@@ -46,20 +37,52 @@ class Game extends Component {
     cells.forEach(([row, column]) => {
       board[row][column].color = colors.pop()
     })
-    this.setState({board})
+    this.setState({ board })
   }
   componentDidMount() {
     const cells = this.getNextRandomCells()
-    const colors = this.getRandomColors()
+    const colors = this.state.nextRandomColors
+    const nextColors = this.getRandomColors()
+    this.setState({
+      nextRandomColors: nextColors
+    })
     this.writeCells(cells, colors)
+  }
+  handleClick(cell, color) {
+    //cell >> [int, int]
+    //color >> [str]
+    if (color[0] !== null) {
+      //if the clicked cell has color, store picked color and cell
+      this.setState({ 
+        colorPicked: color[0],
+        cellPicked: cell
+      })
+    } else {
+      //if the clicked cell doesn't have color, check if there's previous picked color, if so, write color on that cell
+      if (color[0] === null && this.state.colorPicked !== null) {
+        this.writeCells([cell], [this.state.colorPicked])
+        this.writeCells([this.state.cellPicked], [null])
+        this.setState({
+          colorPicked: null,
+          cellPicked: null,
+          nextRandomColors: this.getRandomColors(),
+        })
+        this.writeCells(this.getNextRandomCells(), this.getRandomColors())
+      }
+    }
   }
 
   render() {
-    console.log(this.state.board)
+    console.log('index', this.state.nextRandomColors)
     return (
-      <div>
-        <GameBoard randomColors={this.state.nextRandomColors} board={this.state.board} />
-      </div>
+      <React.Fragment>
+          <div>score</div>
+          <GameBoard 
+            board={this.state.board} 
+            onClick={(cell, color) => this.handleClick(cell, color)}
+          />
+          <NextColors colors={this.state.nextRandomColors} />
+      </React.Fragment>
     )
   }
 }
