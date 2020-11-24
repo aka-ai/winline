@@ -5,6 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  justify-content: center;
 }
 
 code {
@@ -14,8 +16,8 @@ code {
 
 button {
   font-size: 40px;
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
   color: teal;
   background: linear-gradient(259.07deg,
   rgb(250, 247, 250) 4.07%,
@@ -26,4 +28,11 @@ button {
   border-color: rgb(233, 233, 233); 
   float: left;
   font-weight: bold;
+}
+
+.board-row {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+
 }
